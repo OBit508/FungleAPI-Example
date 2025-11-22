@@ -1,4 +1,5 @@
-﻿using FungleAPI.Hud;
+﻿using FungleAPI.Base.Buttons;
+using FungleAPI.Hud;
 using FungleAPI.PluginLoading;
 using FungleAPI.Utilities.Assets;
 using System;
@@ -10,7 +11,7 @@ using UnityEngine;
 
 namespace FungleAPI_Example
 {
-    public class ExampleButton : CustomAbilityButton
+    public class ExampleButton : RoleButton<WallWalker_Example>
     {
         public static Sprite __sprite;
         public override bool Active => true;

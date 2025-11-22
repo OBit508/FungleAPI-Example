@@ -1,5 +1,6 @@
 ﻿using AmongUs.GameOptions;
 using FungleAPI.GameOver;
+using FungleAPI.PluginLoading;
 using FungleAPI.Role.Teams;
 using System;
 using System.Collections.Generic;
@@ -40,9 +41,9 @@ namespace FungleAPI_Example
         {
             return base.CreatePriorityOption(transform);
         }        
-        public override void Initialize()
+        public override void Initialize(ModPlugin plugin)
         {
-            base.Initialize();
+            base.Initialize(plugin);
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AmongUs.GameOptions;
+using FungleAPI.Base.Roles;
 using FungleAPI.Configuration;
 using FungleAPI.Configuration.Attributes;
 using FungleAPI.Hud;
@@ -16,11 +17,11 @@ using UnityEngine;
 
 namespace FungleAPI_Example
 {
-    public class WallWalker_Example : RoleBehaviour, ICustomRole
+    public class WallWalker_Example : NeutralBase, ICustomRole
     {
-        [ModdedNumberOption("Ability Cooldown", null, 1, 60)]
+        [ModdedNumberOption("Ability Cooldown", 1, 60)]
         public static float AbilityCooldown => 15;
-        [ModdedNumberOption("Ability Duration", null, 1, 60)]
+        [ModdedNumberOption("Ability Duration", 1, 60)]
         public static float AbilityDuration => 15;
         public ModdedTeam Team { get; } = ModdedTeam.Instance<ExampleTeam>();
         public StringNames RoleName { get; } = new Translator("Wall Walker").StringName;
@@ -28,7 +29,6 @@ namespace FungleAPI_Example
         public StringNames RoleBlurMed => RoleBlur;
         public StringNames RoleBlurLong => RoleBlur;
         public Color RoleColor { get; } = Color.yellow;
-        public List<CustomAbilityButton> Buttons { get; } = new List<CustomAbilityButton>() { CustomAbilityButton.Instance<ExampleButton>() };
         public bool CanUseVent { get; } = false;
         public bool IsAffectedByLightOnAirship { get; } = true;
         public bool UseVanillaKillButton { get; } = true;
@@ -48,29 +48,6 @@ namespace FungleAPI_Example
         public bool CanKill => UseVanillaKillButton;
         public Color OutlineColor => RoleColor;
         public override bool IsDead => false;
-        public virtual Il2CppSystem.Collections.Generic.List<PlayerControl> GetValidTargets()
-        {
-            List<PlayerControl> targets = GetTempPlayerList().ToSystemList();
-            targets.RemoveAll(t => t.Data.Role.GetTeam() == Team && !Team.FriendlyFire);
-            return targets.ToIl2CppList();
-        }
-        public override PlayerControl FindClosestTarget()
-        {
-            Il2CppSystem.Collections.Generic.List<PlayerControl> playersInAbilityRangeSorted = GetPlayersInAbilityRangeSorted(GetValidTargets());
-            if (playersInAbilityRangeSorted.Count <= 0)
-            {
-                return null;
-            }
-            return playersInAbilityRangeSorted[0];
-        }
-        public override bool DidWin(GameOverReason gameOverReason)
-        {
-            return Team.DefaultGameOver.Reason == gameOverReason;
-        }
-        public override DeadBody FindClosestBody()
-        {
-            return Player.GetClosestDeadBody(GetAbilityDistance());
-        }
         public string ExileText(ExileController exileController)
         {
             string[] array = StringNames.ExileTextSP.GetString().Split(' ', StringSplitOptions.RemoveEmptyEntries);
@@ -80,7 +57,7 @@ namespace FungleAPI_Example
         {
             if (Player != null)
             {
-                Player.Collider.enabled = !Buttons[0].Transformed;
+                Player.Collider.enabled = !CustomAbilityButton.Instance<ExampleButton>().Transformed;
             }
         }
     }
