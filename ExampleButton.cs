@@ -14,7 +14,7 @@ namespace FungleAPI_Example
     public class ExampleButton : RoleButton<WallWalker_Example>
     {
         public static Sprite __sprite;
-        public override bool Active => true;
+        public override bool Active => base.Active;
         public override Sprite ButtonSprite => __sprite;
         public override bool CanClick => true;
         public override bool CanUse => true;
